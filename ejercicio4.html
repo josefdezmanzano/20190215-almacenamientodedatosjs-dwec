@@ -1,0 +1,70 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    Nombre: <input type="text" id="nombre"> </br>
+    Apellido: <input type="text" id="apellido"> </br>
+    Edad: <input type="text" id="edad"> </br>
+
+    <table style="width:100%">
+        <td>
+            <tr><button id="btnAnadirItemBD">AñadirItemTabla1</button></tr>
+            <tr><button id="btnAnadirItemBD2">AñadirItemTabla2</button></tr>
+        </td>
+        <td>
+        <th><button id="btnLeerBD">LeerItemXNombreTabla1</button></th>
+        <th><button id="btnActualizarValorBD1">ActualizarItemXNombreTabla1</button></th>
+        <th><button id="btnBorrarValorBD1">BorrarItemXNombreTabla1</button></th>
+        </td>
+
+    </table>
+
+    </br>
+
+    <table>
+        <td>
+        <th><button id="iterar1">IterarTabla1</button></th>
+        <th><textarea id="textArea1" rows="20" cols="20"></textarea></th>
+        </td>
+        <td>
+        <th>
+            Valor1: <input type="text" id="valor1"> </br>
+            Valor2: <input type="text" id="valor2"> </br>
+            <button id="iterar2">IterarEntreValoresTabla2</button>
+        </th>
+        <th><textarea id="textArea2" rows="20" cols="20"></textarea></th>
+        </td>
+    </table>
+    <script>
+
+        if (!window.indexedDB) {
+            window.alert("Su navegador no soporta una versión estable de indexedDB. Tal y como las características no serán validas");
+        }
+        /**
+        * Sobre la ObjectStore 1 añadir objetos que contengan 
+        * los campos nombre, apellido y edad.
+        */
+
+        function aniadirItemTabla1(params) {
+
+            var request = window.indexedDB.open("MyTestDatabase", 3);
+        }
+
+
+        function aniadirItemTabla2(params) {
+
+        }
+
+
+        
+    </script>
+</body>
+
+</html>
