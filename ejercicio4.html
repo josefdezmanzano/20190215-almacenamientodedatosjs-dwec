@@ -43,10 +43,14 @@
         </td>
     </table>
     <script>
-
-        if (!window.indexedDB) {
-            window.alert("Su navegador no soporta una versión estable de indexedDB. Tal y como las características no serán validas");
+        let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
+        if (!indexedDB){
+            console.log("No soportada");
         }
+        var openDB = indexedDB.open('db1', 3);
+
+
+     
         /**
         * Sobre la ObjectStore 1 añadir objetos que contengan 
         * los campos nombre, apellido y edad.
@@ -54,7 +58,12 @@
 
         function aniadirItemTabla1(params) {
 
+           
             var request = window.indexedDB.open("MyTestDatabase", 3);
+
+            upgradeDb.createObjectStore('objectStore1', {autoIncrement:true});
+
+            
         }
 
 
@@ -63,7 +72,7 @@
         }
 
 
-        
+
     </script>
 </body>
 
