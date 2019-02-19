@@ -1,8 +1,15 @@
 
+
+if (typeof localStorage.getItem("contador")!== 'undefined') {
+    // your code here
+    document.getElementById("resultado").innerHTML = localStorage.getItem("contador");
+    contador=localStorage.getItem("contador");
+}else{
+
 //reursos
-
-
 var contador = 0;
+
+  }
 
 
 //escuchas
@@ -33,11 +40,17 @@ function informacionCookie() {
 
             element.replace("=", "");
             element.replace("contador", "");
-            document.getElementById("resultado").innerHTML=element;
-        
+            document.getElementById("resultado").innerHTML = element;
+            //Web storage
+           
+            if (window.localStorage) {
+                localStorage.setItem('contador', element.substring(element.indexOf("=")+1,element.length));
+            } else {
+                // No hay soporte de localStorage
+            }
         }
     });
-    
 
-    
+
+
 }
