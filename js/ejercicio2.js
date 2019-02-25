@@ -27,6 +27,10 @@ function validaCampo() {
         let expires = "expires=" + date.toUTCString();
         document.cookie = "contador=" + contador + ";" + expires + ";path=/";
         informacionCookie();
+    }else{
+        document.cookie = "contador=0;" + expires + ";path=/";
+        informacionCookie();
+        contador=0;
     }
 
 }

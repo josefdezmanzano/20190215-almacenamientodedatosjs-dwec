@@ -15,7 +15,7 @@
 
     <table style="width:100%">
         <td>
-            <tr><button id="btnAnadirItemBD">AñadirItemTabla1</button></tr>
+            <tr><button id="btnAnadirItemBD" onclick="aniadirItemTabla1()"> AñadirItemTabla1</button></tr>
             <tr><button id="btnAnadirItemBD2">AñadirItemTabla2</button></tr>
         </td>
         <td>
@@ -42,38 +42,7 @@
         <th><textarea id="textArea2" rows="20" cols="20"></textarea></th>
         </td>
     </table>
-    <script>
-        let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
-        if (!indexedDB){
-            console.log("No soportada");
-        }
-        var openDB = indexedDB.open('db1', 3);
-
-
-     
-        /**
-        * Sobre la ObjectStore 1 añadir objetos que contengan 
-        * los campos nombre, apellido y edad.
-        */
-
-        function aniadirItemTabla1(params) {
-
-           
-            var request = window.indexedDB.open("MyTestDatabase", 3);
-
-            upgradeDb.createObjectStore('objectStore1', {autoIncrement:true});
-
-            
-        }
-
-
-        function aniadirItemTabla2(params) {
-
-        }
-
-
-
-    </script>
+  <script src="/js/ejercicio4.js" defer></script>
 </body>
 
 </html>

@@ -5,19 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="/js/ejercicio3.js"></script>
 </head>
-<body>
+<body onload="cargaElementos()">
     <div class="small-container">
         <h1>Probando sistemas de almacenamiento</h1>
    
-        <form>
+        
           <input id="item" type="text" placeholder="New">
-        </form>
+          <button onclick="almacenaElemento()">Agregar Elemento</button>
+        
    
         <h2>Elementos</h2>
-        <ul></ul>
+        <ul id="ul"></ul>
    
-        <button>Limpiar todo</button>
+        <button onclick="borrarElementos()">Limpiar todo</button>
+        
     </div>
 </body>
 </html>
