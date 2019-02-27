@@ -15,7 +15,7 @@
 
     <table style="width:100%">
         <td>
-            <tr><button id="btnAnadirItemBD" onclick="aniadirItemTabla1()"> AñadirItemTabla1</button></tr>
+            <tr><button id="btnAnadirItemBD">AñadirItemTabla1</button></tr>
             <tr><button id="btnAnadirItemBD2">AñadirItemTabla2</button></tr>
         </td>
         <td>
@@ -42,7 +42,188 @@
         <th><textarea id="textArea2" rows="20" cols="20"></textarea></th>
         </td>
     </table>
-  <script src="/js/ejercicio4.js" defer></script>
+    <script>
+        let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
+        if (!indexedDB) {
+            console.log("No soportada");
+        }
+        
+        var request = indexedDB.open('db1', 3);
+        let db = null;
+        //funcicon para el evento de error
+
+        request.onerror = function (event) {
+            console.log('Fallo: La base de datos no se abrio correctamente');
+        };
+
+        //funcion para el evento de exito
+        request.onsuccess = function (event) {
+            db = request.result;
+            console.log('Correcto: La base de datos se abrio corectamente');
+        };
+
+        request.onupgradeneeded = function (event) {
+            db = event.target.result;
+            //var objectStore;
+            
+            if (!db.objectStoreNames.contains('persona')) {
+                let objectStore = db.createObjectStore('persona', { keyPath: 'nombre' });
+                objectStore.createIndex('apellido', 'apellido', { unique: false });
+                objectStore.createIndex('edad', 'edad', { unique: true });
+            }
+            if (!db.objectStoreNames.contains('persona2')) {
+                //Segunda tabla
+                let objectStore = db.createObjectStore('persona2', { keyPath: 'nombre2' });
+                objectStore.createIndex('apellido2', 'apellido2', { unique: false });
+                objectStore.createIndex('edad2', 'edad2', { unique: true })
+            }
+               
+            
+
+
+            console.log('Correcto: Tablas creadas correctamente');
+
+        }
+
+        /**
+        * Sobre la ObjectStore 1 añadir objetos que contengan 
+        * los campos nombre, apellido y edad.
+        */
+        //LISTENERS
+        document.getElementById("btnAnadirItemBD").addEventListener("click", anadirItemTabla1, false);
+        document.getElementById("btnLeerBD").addEventListener("click", mostrarUnItem, false);
+        document.getElementById("btnAnadirItemBD2").addEventListener("click", anadirItemTabla2, false);
+        document.getElementById("btnBorrarValorBD1").addEventListener("click", borratUnItem, false);
+        document.getElementById("btnActualizarValorBD1").addEventListener("click", modificarUnItem, false);
+
+        function anadirItemTabla1(event) {
+
+            let nuevoNombre = document.getElementById("nombre").value;
+            let nuevoApellido = document.getElementById("apellido").value;
+            let nuevaEdad = parseInt(document.getElementById("edad").value);
+            persona = { nombre: 'nueva', apellido: 'nose', edad: 40 };
+
+            var request = db.transaction(['persona'], 'readwrite')
+                .objectStore('persona')
+                .add({ nombre: nuevoNombre, apellido: nuevoApellido, edad: parseInt(nuevaEdad) });
+
+            request.onsuccess = function (event) {
+                console.log('CORRECTO: Los datos se ha insertado correctamente');
+            };
+
+            request.onerror = function (event) {
+                console.log('FALLO: Los datos No se han podido insertar');
+                alert("ERROR: Esa persona ya existe en la base de datos");
+            }
+            muestraItemsTabla1();
+        }
+
+
+        
+                function anadirItemTabla2(event) {
+                      
+                    let nuevoNombre = document.getElementById("nombre").value;   
+                    let nuevoApellido = document.getElementById("apellido").value;
+                    let nuevaEdad = parseInt(document.getElementById("edad").value);
+                    //persona = { nombre: 'nueva', apellido: 'nose', edad: 40 };
+        
+                    var request = db.transaction(['persona2'], 'readwrite')
+                        .objectStore('persona2')
+                        .add({ nombre: nuevoNombre, apellido: nuevoApellido, edad: parseInt(nuevaEdad) });
+        
+                    request.onsuccess = function (event) {
+                        console.log('CORRECTO: Los datos se ha insertado correctamente');
+                    };
+        
+                    request.onerror = function (event) {
+                        console.log('FALLO: Los datos No se han podido insertar');
+                    }
+                    muestraItemsTabla1();
+                }
+        
+        
+        
+
+        function mostrarUnItem() {
+
+            let transaction = db.transaction(['persona']);
+            let objectStore = transaction.objectStore('persona');
+            let seleccion = prompt("Escribe el nombre de la persona aqui: ");
+            let request = objectStore.get(seleccion);
+            let destino = document.getElementById("textArea1");
+
+            request.onerror = function (event) {
+                console.log('ERROR: No se pudo realizar la transacción');
+            };
+
+            request.onsuccess = function (event) {
+                if (request.result) {
+                    destino.innerHTML = 'Persona elegida =======>' + ' nombre: ' + request.result.nombre + ' Apellido: ' + request.result.apellido + ' Edad: ' + request.result.edad;
+
+                } else {
+                    console.log('No hay datos amiguito }:·3');
+                }
+            };
+
+        }
+
+
+        //Mis mierdas para probar
+
+        function muestraItemsTabla1() {
+
+            let objectStore = db.transaction(['persona'], 'readwrite').objectStore('persona');
+
+            objectStore.openCursor().onsuccess = function (event) {
+                var cursor = event.target.result;
+                let destino = document.getElementById("textArea1");
+                let contador = 0;
+                if (cursor) {
+                    contador++;
+                    destino.append('persona' + contador + ' nombre: ' + cursor.value.nombre + ' Apellido: ' + cursor.value.apellido + ' Edad: ' + cursor.value.edad + '   ');
+                    cursor.continue();
+                } else {
+                    console.log('No existen mas datos');
+                }
+            };
+        }
+        function borratUnItem(event) {
+
+            let seleccion = prompt("Escribe el nombre de la persona aqui: ");
+            var request = db.transaction(['persona'], 'readwrite')
+                .objectStore('persona')
+                .delete(seleccion);
+
+            request.onsuccess = function (event) {
+                console.log('CORRECTO: Persona borrada correctamente');
+            };
+
+        }
+        function modificarUnItem(event) {
+            let nuevoNombre = prompt("Escribe el nombre de la persona a modificar aqui: ");
+            let nuevoApellido= prompt("Escribe el apellido a modificar aqui: ");
+            let nuevaEdad= prompt("Escribe la edad a modificar aqui: ");
+
+            var request = db.transaction(['persona'], 'readwrite')
+                .objectStore('persona')
+                .put({ nombre: nuevoNombre, apellido: nuevoApellido, edad: nuevaEdad });
+
+            request.onsuccess = function (event) {
+                console.log('CORRECTO: Los datos se han actualizado correctamente');
+            };
+
+            request.onerror = function (event) {
+                console.log('ERROR: Los datos no se ha podido actualizar');
+            }
+        }
+
+        //    var transaction = db.transaction(tablaBD, 'readwrite').objectStore(persona).add(persona);
+
+
+
+
+
+    </script>
 </body>
 
 </html>
